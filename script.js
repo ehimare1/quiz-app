@@ -13,7 +13,7 @@ const questions = [
         answers: [
             { text: "6", correct: false},
             { text: "1", correct: false},
-            { text: "22", correct: false},
+            { text: "22t", correct: false},
             { text: "4", correct: true},
         ]
     },
@@ -40,6 +40,7 @@ const questions = [
 const questionElement = document.getElementById("question");
 const answerButtonElement = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
+const retryButton = document.getElementById("retry-btn"); // Add Retry button
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -48,6 +49,7 @@ function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     nextButton.innerHTML = "Next";
+    retryButton.style.display = "none"; // Hide the Retry button
     showQuestion();
 }
 
@@ -80,9 +82,27 @@ function checkAnswer(answer) {
         // Quiz is over
         questionElement.innerHTML = `Your Score: ${score} out of ${questions.length}`;
         answerButtonElement.innerHTML = "";
-        nextButton.innerHTML = "Restart";
-        nextButton.addEventListener("click", startQuiz);
+        nextButton.style.display = "none"; // Hide the Next button
+        retryButton.style.display = "block"; // Show the Retry button
     }
 }
+
+nextButton.addEventListener("click", () => {
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        showQuestion();
+    } else {
+        finishQuiz();
+    }
+});
+
+function finishQuiz() {
+    questionElement.innerHTML = `Your Score: ${score} out of ${questions.length}`;
+    answerButtonElement.innerHTML = "";
+    nextButton.style.display = "none"; // Hide the Next button
+    retryButton.style.display = "block"; // Show the Retry button
+}
+
+retryButton.addEventListener("click", startQuiz); // Add event listener for Retry button
 
 startQuiz();
